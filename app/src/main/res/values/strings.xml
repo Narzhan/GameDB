@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Demo</string>
+    <string name="action_settings">Settings</string>
+    <string name="rules_are_here">Rules are here</string>
+</resources>
