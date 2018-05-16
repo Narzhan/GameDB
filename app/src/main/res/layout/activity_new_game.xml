@@ -25,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Type your new game"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -37,42 +38,98 @@
             android:hint="Games name"
             />
 
-        <EditText
-            android:id="@+id/new_type"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:hint="Games type"
-            />
+            android:layout_alignParentBottom="true">
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/new_type"
+                android:layout_margin="5dp"
+                android:layout_weight="1"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/new_duration"
+                android:layout_margin="5dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
 
         <EditText
             android:id="@+id/new_rules"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
             android:hint="Games rules"
-            />
+            android:inputType="textMultiLine" />
 
-        <Button
-            android:id="@+id/new_done"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="doneClicked"
-            android:text="Done" />
+            android:layout_alignParentBottom="true">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <Switch
+                    android:id="@+id/new_type_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Cathegory" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1">
+
+                <Switch
+                    android:id="@+id/new_duration_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Duration" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/new_cathegory_duration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:hint="Your custom duration/type"
+            />
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <android.support.design.widget.FloatingActionButton
+            <android.support.design.widget.FloatingActionButton
             android:id="@+id/new_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|center"
             android:layout_margin="16dp"
             android:layout_marginBottom="8dp"
             android:backgroundTint="@color/colorPrimary"
             android:tooltipText="Confirm game creation"
-            app:srcCompat="@android:drawable/ic_input_add"/>
+            android:tint="@android:color/white"
+            app:srcCompat="@drawable/ic_baseline_done_24px"/>
+
+
+
         </FrameLayout>
     </LinearLayout>
 

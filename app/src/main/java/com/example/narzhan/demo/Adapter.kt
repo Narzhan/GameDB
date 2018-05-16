@@ -33,7 +33,6 @@ class Adapter(val userList: ArrayList<Game>, val cliclListener: (Game) -> Unit) 
         fun bind(game: Game, clickListener: (Game) -> Unit) {
                 itemView.setOnClickListener { clickListener(game)}
             }
-
     }
 
 }

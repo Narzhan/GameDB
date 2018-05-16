@@ -10,6 +10,8 @@ data class Game(
         var name: String="",
         @ColumnInfo(name = "type")
         var type: String="",
+        @ColumnInfo(name = "duration")
+        var duration: String="",
         @ColumnInfo(name = "rules")
         var rules: String="",
         @PrimaryKey(autoGenerate = true)
@@ -17,8 +19,8 @@ data class Game(
         var id: Int=0
 
 )	{
-    override fun toString(): String {
-        return name
-    }
+//    override fun toString(): String {
+//        return name
+//    }
 }
 

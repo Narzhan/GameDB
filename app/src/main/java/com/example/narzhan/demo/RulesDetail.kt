@@ -13,6 +13,7 @@ class RulesDetail : AppCompatActivity() {
 
     private val db = Room.databaseBuilder(this, AppDatabase::class.java, "db")
             .allowMainThreadQueries()
+            .fallbackToDestructiveMigration()
             .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
