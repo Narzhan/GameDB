@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.*
@@ -23,63 +24,71 @@ class NewGame : AppCompatActivity() {
             .fallbackToDestructiveMigration()
             .build()
 
+
+
+// jak rikal Radim v main aktivite bude add, tady uz jen formular
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_game)
         setSupportActionBar(findViewById(R.id.new_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setTitle("New Game Creation")
-        val newVarious: EditText=findViewById(R.id.new_cathegory_duration)
-        newVarious.visibility= View.INVISIBLE
+//        val newVarious: EditText=findViewById(R.id.new_cathegory_duration)
+//        newVarious.visibility= View.INVISIBLE
 
-        var typesChoices = mutableListOf("běhací", "přemýšlecí", "malá", "noční")
+        val values = intent.extras
+
+//        var typesChoices = mutableListOf("běhací", "přemýšlecí", "malá", "noční")
+        val typesChoices: List<String> = values.get("types").toString().split(",").map { it.trim() }
         val typesAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, typesChoices)
         val typeSpinner: Spinner = findViewById(R.id.new_type)
         typesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
         typeSpinner.adapter = typesAdapter
 
-        var durationChoices = mutableListOf("30 min", "1 h", "1,5 h", "2 h")
+//        var durationChoices = mutableListOf("30 min", "1 h", "1,5 h", "2 h")
+        val durationChoices: List<String> = values.get("durations").toString().split(",").map { it.trim() }
         val durationAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, durationChoices)
         val durationSpinner: Spinner = findViewById(R.id.new_duration)
         durationAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
         durationSpinner.adapter = durationAdapter
 
-        val newType: Switch = findViewById(R.id.new_type_switch)
-        val newDuration: Switch = findViewById(R.id.new_duration_switch)
+//        val newType: Switch = findViewById(R.id.new_type_switch)
+//        val newDuration: Switch = findViewById(R.id.new_duration_switch)
 
-        newType.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                if (newDuration.isChecked) {
-                    newDuration.isChecked = false
-                }
-                newVarious.visibility = View.VISIBLE
-            } else {
-                newVarious.visibility = View.INVISIBLE
-                if (!newVarious.text.toString().isEmpty()) {
-                    typesChoices.add(newVarious.text.toString())
-                    typesAdapter.notifyDataSetChanged()
-                    typeSpinner.setSelection(typesChoices.indexOf(newVarious.text.toString()))
-                    newVarious.setText("")
-                }
-            }
-        }
+//        newType.setOnCheckedChangeListener { _, isChecked ->
+//            if (isChecked) {
+//                if (newDuration.isChecked) {
+//                    newDuration.isChecked = false
+//                }
+//                newVarious.visibility = View.VISIBLE
+//            } else {
+//                newVarious.visibility = View.INVISIBLE
+//                if (!newVarious.text.toString().isEmpty()) {
+//                    typesChoices.add(newVarious.text.toString())
+//                    typesAdapter.notifyDataSetChanged()
+//                    typeSpinner.setSelection(typesChoices.indexOf(newVarious.text.toString()))
+//                    newVarious.setText("")
+//                }
+//            }
+//        }
 
-        newDuration.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                if (newType.isChecked) {
-                    newType.isChecked = false
-                }
-                newVarious.visibility = View.VISIBLE
-            } else {
-                newVarious.visibility = View.INVISIBLE
-                if (!newVarious.text.toString().isEmpty()) {
-                    durationChoices.add(newVarious.text.toString())
-                    durationAdapter.notifyDataSetChanged()
-                    durationSpinner.setSelection(durationChoices.indexOf(newVarious.text.toString()))
-                    newVarious.setText("")
-                }
-            }
-        }
+//        newDuration.setOnCheckedChangeListener { _, isChecked ->
+//            if (isChecked) {
+//                if (newType.isChecked) {
+//                    newType.isChecked = false
+//                }
+//                newVarious.visibility = View.VISIBLE
+//            } else {
+//                newVarious.visibility = View.INVISIBLE
+//                if (!newVarious.text.toString().isEmpty()) {
+//                    durationChoices.add(newVarious.text.toString())
+//                    durationAdapter.notifyDataSetChanged()
+//                    durationSpinner.setSelection(durationChoices.indexOf(newVarious.text.toString()))
+//                    newVarious.setText("")
+//                }
+//            }
+//        }
 
         val newGameFab: FloatingActionButton = findViewById(R.id.new_fab)
         newGameFab.setOnClickListener {
@@ -111,12 +120,13 @@ class NewGame : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return if (item?.itemId == android.R.id.home) {
-            finish()
-            true
-        } else {
-            super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
         }
+        return super.onOptionsItemSelected(item)
     }
 }

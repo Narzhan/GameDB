@@ -17,6 +17,9 @@ interface GameDao {
     @Delete
     fun removeGame(game: Game)
 
+    @Query("DELETE FROM game")
+    fun destroyAll()
+
     @Update
     fun updateGame(game:Game)
 //    @Query("UPDATE game SET :column = :value WHERE id = :id")
