@@ -11,14 +11,22 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/new_toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:background="?attr/colorPrimary"-->
+            <!--android:elevation="4dp"-->
+            <!--android:theme="@style/ThemeOverlay.AppCompat.ActionBar"-->
+            <!--app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>-->
         <android.support.v7.widget.Toolbar
             android:id="@+id/new_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/Theme.AppCompat.Light"/>
 
         <TextView
             android:id="@+id/new_description"
@@ -65,53 +73,53 @@
             android:hint="Games rules"
             android:inputType="textMultiLine" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true">-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1">
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_weight="1">-->
 
-                <Switch
-                    android:id="@+id/new_type_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Switch-->
+                    <!--android:id="@+id/new_type_switch"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="New Cathegory" />
-            </LinearLayout>
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="New Cathegory" />-->
+            <!--</LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1">
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:layout_weight="1">-->
 
-                <Switch
-                    android:id="@+id/new_duration_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <!--<Switch-->
+                    <!--android:id="@+id/new_duration_switch"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="New Duration" />
-            </LinearLayout>
-        </LinearLayout>
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="New Duration" />-->
+            <!--</LinearLayout>-->
+        <!--</LinearLayout>-->
 
-        <EditText
-            android:id="@+id/new_cathegory_duration"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:hint="Your custom duration/type"
-            />
+        <!--<EditText-->
+            <!--android:id="@+id/new_cathegory_duration"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:inputType="textMultiLine"-->
+            <!--android:hint="Your custom duration/type"-->
+            <!--/>-->
 
         <FrameLayout
             android:layout_width="match_parent"
