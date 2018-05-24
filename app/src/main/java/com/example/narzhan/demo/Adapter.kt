@@ -25,14 +25,6 @@ class Adapter(val userList: ArrayList<Game>, val cliclListener: (Game) -> Unit) 
         } else {
             holder?.picType?.setImageResource(R.drawable.ic_baseline_note_add_24px)
         }
-//        when{
-//            images.containsKey(userList[position].type) -> holder?.picType?.setImageResource(images.getValue(userList[position].type))
-//            userList[position].type == "běhací" -> holder?.picType?.setImageResource(R.drawable.ic_baseline_directions_run_24px)
-//            userList[position].type == "přemýšlecí" -> holder?.picType?.setImageResource(R.drawable.ic_baseline_book_24px)
-//            userList[position].type == "malá" -> holder?.picType?.setImageResource(R.drawable.ic_baseline_access_alarm_24px)
-//            userList[position].type == "noční" -> holder?.picType?.setImageResource(R.drawable.ic_baseline_highlight_24px)
-//            else -> holder?.picType?.setImageResource(R.drawable.ic_baseline_note_add_24px)
-//        }
         (holder as ViewHolder).bind(userList[position], cliclListener)
     }
 
