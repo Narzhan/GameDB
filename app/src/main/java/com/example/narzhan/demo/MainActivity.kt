@@ -14,16 +14,9 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
-import com.google.firebase.FirebaseError
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import retrofit2.Callback
-import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,10 +26,11 @@ class MainActivity : AppCompatActivity() {
             .build()
 
     private val ADD_TASK_REQUEST = 1
-    private lateinit var rv :RecyclerView
+    private var DELETE = false
+    private lateinit var rv: RecyclerView
     private var dbReference: DatabaseReference = FirebaseDatabase.getInstance().reference
 
-    private var typesChoices = mutableListOf("běhací", "přemýšlecí", "malá", "noční")
+    private var typesChoices = mutableListOf("running", "thinking", "small", "night")
     private var durationChoices = mutableListOf("30 min", "1 h", "1,5 h", "2 h")
 
 
@@ -48,47 +42,66 @@ class MainActivity : AppCompatActivity() {
         rv = findViewById<RecyclerView>(R.id.main_recycler)
         rv.layoutManager = LinearLayoutManager(this, LinearLayout.VERTICAL, false)
 
-//        db.gameDao().destroyAll()
-        val dbValues = db.gameDao().getAll()
+        var games = db.gameDao().getAll()
 
-//        val gameListener = object : ValueEventListener {
-//            override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                dataSnapshot.children.forEach {
-//                    Log.wtf("child",it.child("games").key)
-//                    Log.wtf("id", it.child("games").value.toString())
-//                }
-//            }
-//
-//            override fun onCancelled(databaseError: DatabaseError) {
-//                Log.wtf("Error getting data", databaseError.toException())
-//            }
-//        }
-//        dbReference.addListenerForSingleValueEvent(gameListener)
+        if (games.isEmpty()) {
+            val menuListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (game in dataSnapshot.children) {
+                            db.gameDao().insert(game.getValue(Game::class.java)!!)
+                            refreshList()
+                            Snackbar.make(rv, "Default values loaded from Firebase", Snackbar.LENGTH_LONG).show()
+                        }
+                    } else {
+                        createDefaultValues()
+                        refreshList()
+                        Snackbar.make(rv, "Default values loaded to db and Firebase", Snackbar.LENGTH_LONG).show()
+                    }
+                }
 
-        when {
-            dbValues.isEmpty() -> {
-//                val gameListener = object : ValueEventListener {
-//                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                        if (!dataSnapshot.hasChild("games")){
-                            createDefaultValues()
-                            Snackbar.make(rv, "Default values loaded to db and Firebase", Snackbar.LENGTH_LONG).show()
-//                        }
-//                    }
-//
-//                    override fun onCancelled(databaseError: DatabaseError) {
-//                        Log.wtf("Error getting data", databaseError.toException())
-//                    }
-//                }
-//                dbReference.addListenerForSingleValueEvent(gameListener)
+                override fun onCancelled(databaseError: DatabaseError) {
+                    createDefaultValues()
+                    Snackbar.make(rv, "Default values failed to load from db and Firebase", Snackbar.LENGTH_LONG).show()
+                    Log.wtf("Firebase error", "loadPost:onCancelled ${databaseError.toException()}")
+                }
             }
-            else -> {
-                Snackbar.make(rv, "Default values present, no loading", Snackbar.LENGTH_LONG).show()
+            dbReference.child("games").addListenerForSingleValueEvent(menuListener)
+        } else {
+            val menuListener = object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        val ids: MutableList<Int> = mutableListOf()
+                        for (game in db.gameDao().getAll()) {
+                            ids.add(game.id)
+                        }
+                        var gameAdded = false
+                        for (game in dataSnapshot.children) {
+                            if (!ids.contains(game.getValue(Game::class.java)!!.id)) {
+                                db.gameDao().insert(game.getValue(Game::class.java)!!)
+                                gameAdded = true
+                            }
+                        }
+                        if (gameAdded) {
+                            refreshList()
+                            Snackbar.make(rv, "Values loaded from local storage and Firebase", Snackbar.LENGTH_LONG).show()
+                        } else {
+                            Snackbar.make(rv, "All values present, no loading", Snackbar.LENGTH_LONG).show()
+                        }
+
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    createDefaultValues()
+                    Snackbar.make(rv, "Default values loaded to db and Firebase", Snackbar.LENGTH_LONG).show()
+                    Log.wtf("Firebase error", "loadPost:onCancelled ${databaseError.toException()}")
+                }
             }
+            dbReference.child("games").addListenerForSingleValueEvent(menuListener)
         }
 
-        val games = db.gameDao().getAll()
-        rv.adapter = Adapter(ArrayList(games), { selectGame : Game -> partItemClicked(selectGame) })
-
+        rv.adapter = Adapter(ArrayList(games), { selectGame: Game -> gameClicked(selectGame) })
 
         val newGameFab: FloatingActionButton=findViewById(R.id.main_fab)
         newGameFab.setOnClickListener{
@@ -106,21 +119,19 @@ class MainActivity : AppCompatActivity() {
                 val name = data?.getStringExtra(NewGame.EXTRA_GAME_NAME)
                 refreshList()
                 Snackbar.make(rv, "New game created: ${name}", Snackbar.LENGTH_LONG).show()
-                // comment
             }
         }
     }
 
     private fun createDefaultValues(){
         val defaultGames: List<Game> = mutableListOf(
-                Game("Capture the flag", "běhací", "1,5 h","Something truly brutal"),
-                Game("Bludiště", "přemýšlecí", "2 h","This is just a placeholder"),
+                Game("Capture the flag", "running", "1,5 h","Something truly brutal"),
+                Game("Maze", "thinking", "2 h","This is just a placeholder"),
                 Game("Something", "something", "30 min","For this, I just didn't know what to put there")
         )
         defaultGames.forEach {
             db.gameDao().insert(it)
             val key=dbReference.child("games").push().key
-//            it.id=key
             dbReference.child("games").child(key).setValue(it)
         }
     }
@@ -140,25 +151,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun partItemClicked(partItem: Game) {
-        val intent = Intent(this, GameDetail::class.java)
-        intent.putExtra("id", partItem.id.toString())
-        intent.putExtra("types", typesChoices.joinToString(","))
-        intent.putExtra("durations", durationChoices.joinToString(","))
-        startActivity(intent)
+    private fun gameClicked(game: Game) {
+        if (!DELETE){
+            val intent = Intent(this, GameDetail::class.java)
+            intent.putExtra("id", game.id.toString())
+            intent.putExtra("types", typesChoices.joinToString(","))
+            intent.putExtra("durations", durationChoices.joinToString(","))
+            startActivity(intent)
+        } else {
+            val alert = AlertDialog.Builder(this)
+            alert.setTitle("Delete confirmation")
+            alert.setMessage("Are you sure you want to delete this game.")
+            alert.setPositiveButton("Yes", { _, _ ->
+                db.gameDao().removeGame(game)
+                refreshList()
+            } )
+            alert.setNegativeButton("Cancel", { _, _ -> })
+            alert.show()
+        }
+
     }
+
 
     fun addHelpDialog(){
         val alert = AlertDialog.Builder(this)
-//        val itemEditText = EditText(this)
-        val type= TextView(this)
-        type.setText("To creta new type select add new type in menu")
-        val duration= TextView(this)
-        type.setText("To creta new duration select add new type in menu")
-        alert.setTitle("Help")
-        val view =View(this)
-        alert.setView(type)
-        alert.setPositiveButton("Understood") { dialog, positiveButton ->
+        alert.setTitle("Help information")
+        alert.setMessage("To see the game details click it.\nTo create new game click +.\nTo delete games click delete icon.\nTo add categories click settings")
+        alert.setPositiveButton("Understood") { _, _ ->
         }
         alert.show()
     }
@@ -166,9 +185,9 @@ class MainActivity : AppCompatActivity() {
     fun addNewItemDialog(cathegory: String, list: MutableList<String>) {
         val alert = AlertDialog.Builder(this)
         val itemEditText = EditText(this)
-        itemEditText.hint = "Add New ${cathegory}"
+        itemEditText.hint = "Add New $cathegory"
 //        alert.setMessage()
-        alert.setTitle("Enter new ${cathegory} text")
+        alert.setTitle("Enter new $cathegory text")
         alert.setView(itemEditText)
         alert.setPositiveButton("Submit") { dialog, positiveButton ->
             if (!list.contains(itemEditText.text.toString())) {
@@ -182,15 +201,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.toolbar_menu, menu)
+        if (!DELETE){
+            val inflater = menuInflater
+            inflater.inflate(R.menu.toolbar_menu, menu)
+            return super.onCreateOptionsMenu(menu)
+        }
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                finish()
+                DELETE = false
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                supportActionBar?.title = "Game DB"
+                setSupportActionBar(findViewById(R.id.main_toolbar))
                 return true
             }
             R.id.toolbar_type -> {
@@ -205,12 +230,19 @@ class MainActivity : AppCompatActivity() {
                 addHelpDialog()
                 return true
             }
+            R.id.toolbar_delete -> {
+                DELETE = true
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                setSupportActionBar(findViewById(R.id.main_toolbar))
+                supportActionBar?.title = "Deleting games..."
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun refreshList() {
         val games = db.gameDao().getAll()
-        rv.adapter = Adapter(ArrayList(games), { selectGame : Game -> partItemClicked(selectGame) })
+        rv.adapter = Adapter(ArrayList(games), { selectGame: Game -> gameClicked(selectGame) })
     }
 }

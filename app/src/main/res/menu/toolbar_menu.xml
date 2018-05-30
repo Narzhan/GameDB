@@ -10,6 +10,12 @@
         <!--android:icon="@drawable/ic_baseline_done_24px"-->
         <!--/>-->
     <item
+        android:id="@+id/toolbar_delete"
+        android:title="Delete"
+        android:icon="@drawable/ic_baseline_delete_24px"
+        app:showAsAction="always|withText"
+        />
+    <item
         android:id="@+id/toolbar_help"
         android:title="Help"
         android:icon="@drawable/ic_baseline_info_24px"

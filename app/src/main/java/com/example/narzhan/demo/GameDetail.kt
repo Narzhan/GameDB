@@ -28,14 +28,9 @@ class GameDetail : AppCompatActivity() {
 
         title = game.name
 
-//        val newVarious: EditText=findViewById(R.id.detail_cathegory_duration)
-//        newVarious.visibility= View.INVISIBLE
-
-//        var typesChoices = mutableListOf("běhací", "přemýšlecí", "malá", "noční")
         var typesChoices: List<String> = values.get("types").toString().split(",").map { it.trim() }
         if (!typesChoices.contains(game.type)){
             typesChoices+=game.type
-//            typesChoices.add(game.type)
         }
         val typesAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, typesChoices)
         val typeSpinner: Spinner = findViewById(R.id.detail_type)
@@ -43,11 +38,9 @@ class GameDetail : AppCompatActivity() {
         typeSpinner.adapter = typesAdapter
         typeSpinner.setSelection(typesChoices.indexOf(game.type))
 
-//        var durationChoices = mutableListOf("30 min", "1 h", "1,5 h", "2 h")
         var durationChoices: List<String> = values.get("durations").toString().split(",").map { it.trim() }
         if (!durationChoices.contains(game.duration)){
             durationChoices+=game.duration
-//            durationChoices.add(game.duration)
         }
         val durationAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, durationChoices)
         val durationSpinner: Spinner = findViewById(R.id.detail_duration)
@@ -55,54 +48,20 @@ class GameDetail : AppCompatActivity() {
         durationSpinner.adapter = durationAdapter
         durationSpinner.setSelection(durationChoices.indexOf(game.duration))
 
-//        val newType: Switch = findViewById(R.id.detail_type_switch)
-//        val newDuration: Switch = findViewById(R.id.detail_duration_switch)
-//
-//        newType.setOnCheckedChangeListener { _, isChecked ->
-//            if (isChecked) {
-//                if (newDuration.isChecked) {
-//                    newDuration.isChecked = false
-//                }
-//                newVarious.visibility = View.VISIBLE
-//            } else {
-//                newVarious.visibility = View.INVISIBLE
-//                if (!newVarious.text.toString().isEmpty()) {
-//                    typesChoices.add(newVarious.text.toString())
-//                    typesAdapter.notifyDataSetChanged()
-//                    typeSpinner.setSelection(typesChoices.indexOf(newVarious.text.toString()))
-//                    newVarious.setText("")
-//                }
-//            }
-//        }
-//
-//        newDuration.setOnCheckedChangeListener { _, isChecked ->
-//            if (isChecked) {
-//                if (newType.isChecked) {
-//                    newType.isChecked = false
-//                }
-//                newVarious.visibility = View.VISIBLE
-//            } else {
-//                newVarious.visibility = View.INVISIBLE
-//                if (!newVarious.text.toString().isEmpty()) {
-//                    durationChoices.add(newVarious.text.toString())
-//                    durationAdapter.notifyDataSetChanged()
-//                    durationSpinner.setSelection(durationChoices.indexOf(newVarious.text.toString()))
-//                    newVarious.setText("")
-//                }
-//            }
-//        }
-
         val rulesButton: Button = findViewById(R.id.detail_rules_button)
         rulesButton.setOnClickListener {
             val intent = Intent(this, RulesDetail::class.java)
             intent.putExtra("id", game.id.toString())
-//            when {
-//                newType.isChecked -> newType.isChecked = false
-//                newDuration.isChecked -> newDuration.isChecked = false
-//            }
             saveData()
             startActivity(intent)
         }
+//        val images = hashMapOf("běhací" to R.drawable.running, "přemýšlecí" to R.drawable.thinking, "malá" to R.drawable.quick, "noční" to R.drawable.night)
+//        val picture: ImageView = findViewById(R.id.detail_picture)
+//        if (images.containsKey(game.type)) {
+//            picture.setImageResource(images.getValue(game.type))
+//        } else {
+//            picture.setImageResource(R.drawable.custom)
+//        }
     }
 
     fun saveData(){

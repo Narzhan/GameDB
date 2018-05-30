@@ -17,9 +17,10 @@ class Adapter(val userList: ArrayList<Game>, val cliclListener: (Game) -> Unit) 
     }
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        val images = hashMapOf("běhací" to R.drawable.ic_baseline_directions_run_24px, "přemýšlecí" to R.drawable.ic_baseline_book_24px, "malá" to R.drawable.ic_baseline_access_alarm_24px, "noční" to R.drawable.ic_baseline_highlight_24px)
+        val images = hashMapOf("running" to R.drawable.ic_baseline_directions_run_24px, "thinking" to R.drawable.ic_baseline_book_24px, "small" to R.drawable.ic_baseline_access_alarm_24px, "night" to R.drawable.ic_baseline_highlight_24px)
         holder?.txtName?.text = userList[position].name
         holder?.txtType?.text = userList[position].type
+
         if (images.containsKey(userList[position].type)) {
             holder?.picType?.setImageResource(images.getValue(userList[position].type))
         } else {

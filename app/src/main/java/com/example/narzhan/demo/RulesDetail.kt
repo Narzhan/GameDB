@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.EditText
+import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_game_detail.*
 import kotlinx.android.synthetic.main.activity_rules_detail.*
 
@@ -32,7 +33,7 @@ class RulesDetail : AppCompatActivity() {
         saveData()
     }
 
-    fun saveData(){
+    fun saveData() {
         val values = intent.extras
         var game = db.gameDao().getGame(values.getString("id"))
         game.rules = rules_text.text.toString()
