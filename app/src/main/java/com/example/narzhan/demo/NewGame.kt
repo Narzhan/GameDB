@@ -25,70 +25,26 @@ class NewGame : AppCompatActivity() {
             .build()
 
 
-
-// jak rikal Radim v main aktivite bude add, tady uz jen formular
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_game)
         setSupportActionBar(findViewById(R.id.new_toolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         setTitle("New Game Creation")
-//        val newVarious: EditText=findViewById(R.id.new_cathegory_duration)
-//        newVarious.visibility= View.INVISIBLE
 
         val values = intent.extras
 
-//        var typesChoices = mutableListOf("běhací", "přemýšlecí", "malá", "noční")
         val typesChoices: List<String> = values.get("types").toString().split(",").map { it.trim() }
         val typesAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, typesChoices)
         val typeSpinner: Spinner = findViewById(R.id.new_type)
         typesAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
         typeSpinner.adapter = typesAdapter
 
-//        var durationChoices = mutableListOf("30 min", "1 h", "1,5 h", "2 h")
         val durationChoices: List<String> = values.get("durations").toString().split(",").map { it.trim() }
         val durationAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, durationChoices)
         val durationSpinner: Spinner = findViewById(R.id.new_duration)
         durationAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
         durationSpinner.adapter = durationAdapter
-
-//        val newType: Switch = findViewById(R.id.new_type_switch)
-//        val newDuration: Switch = findViewById(R.id.new_duration_switch)
-
-//        newType.setOnCheckedChangeListener { _, isChecked ->
-//            if (isChecked) {
-//                if (newDuration.isChecked) {
-//                    newDuration.isChecked = false
-//                }
-//                newVarious.visibility = View.VISIBLE
-//            } else {
-//                newVarious.visibility = View.INVISIBLE
-//                if (!newVarious.text.toString().isEmpty()) {
-//                    typesChoices.add(newVarious.text.toString())
-//                    typesAdapter.notifyDataSetChanged()
-//                    typeSpinner.setSelection(typesChoices.indexOf(newVarious.text.toString()))
-//                    newVarious.setText("")
-//                }
-//            }
-//        }
-
-//        newDuration.setOnCheckedChangeListener { _, isChecked ->
-//            if (isChecked) {
-//                if (newType.isChecked) {
-//                    newType.isChecked = false
-//                }
-//                newVarious.visibility = View.VISIBLE
-//            } else {
-//                newVarious.visibility = View.INVISIBLE
-//                if (!newVarious.text.toString().isEmpty()) {
-//                    durationChoices.add(newVarious.text.toString())
-//                    durationAdapter.notifyDataSetChanged()
-//                    durationSpinner.setSelection(durationChoices.indexOf(newVarious.text.toString()))
-//                    newVarious.setText("")
-//                }
-//            }
-//        }
 
         val newGameFab: FloatingActionButton = findViewById(R.id.new_fab)
         newGameFab.setOnClickListener {
@@ -102,7 +58,6 @@ class NewGame : AppCompatActivity() {
 
 
     fun doneClicked() {
-//        val newGame= Game(new_name.text.toString(), new_type.text.toString(), new_rules.text.toString())
         val inputs = listOf(new_name, new_rules)
         var helper = false
         for (input in inputs) {
